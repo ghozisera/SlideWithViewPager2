@@ -14,13 +14,23 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val adapter = ScreenSlidePagerAdapter(supportFragmentManager, lifecycle)
-        findViewById<ViewPager2>(R.id.viewpager2).adapter = adapter
+        findViewById<ViewPager2>(R.id.viewpager2).apply {
+            setPageTransformer(ZoomOutPageTransformer())
+        }.adapter = adapter
     }
 
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager, lifecycle: Lifecycle) :
         FragmentStateAdapter(fm, lifecycle) {
+        private val fragments = listOf<Fragment>(
+            ScreenSlidePageFragment.newInstance(R.color.purple_200),
+            ScreenSlidePageFragment.newInstance(R.color.purple_500),
+            ScreenSlidePageFragment.newInstance(R.color.purple_700),
+            ScreenSlidePageFragment.newInstance(R.color.teal_200),
+            ScreenSlidePageFragment.newInstance(R.color.teal_700),
+        )
+
         private val NUM_PAGES = 4
         override fun getItemCount(): Int = NUM_PAGES
-        override fun createFragment(position: Int): Fragment = ScreenSlidePageFragment()
+        override fun createFragment(position: Int): Fragment = fragments[position]
     }
 }
